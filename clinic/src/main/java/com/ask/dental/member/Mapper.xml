@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ask.dental.mapper.MemberMapper">
+	<resultMap id="MemResultMap" type="com.ask.dental.member.MemberModel" >
+		<result column="MEM_SEQ" property="memSeq" jdbcType="INTEGER" />
+		<result column="MEM_NM" property="memNm" jdbcType="VARCHAR" />
+    <result column="MEM_ID" property="memId" jdbcType="VARCHAR" />
+    <result column="MEM_AUTH" property="memAuth" jdbcType="VARCHAR" />
+    <result column="MEM_COMPANY" property="memCompany" jdbcType="VARCHAR" />
+    <result column="COM_CODE" property="comCode" jdbcType="VARCHAR" />
+    <result column="MEM_RANK" property="memRank" jdbcType="VARCHAR" />
+    <result column="MEM_TEL" property="memTel" jdbcType="VARCHAR" />
+    <result column="MEM_PHONE" property="memPhone" jdbcType="VARCHAR" />
+    <result column="MEM_EMAIL" property="memEmail" jdbcType="VARCHAR" />
+    <result column="MEM_ADDR" property="memAddr" jdbcType="VARCHAR" />
+    <result column="MEM_PW" property="memPw" jdbcType="VARCHAR" />
+    <result column="DEL_YN" property="delYn" jdbcType="VARCHAR" />
+    <result column="INSERT_USER" property="insertUser" jdbcType="VARCHAR" />
+    <result column="INSERT_DATE" property="insertDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_USER" property="updateUser" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+	
+	<select id="selectMemberCount" resultType="int" >
+		SELECT COUNT(*) MEM_ID 
+		 FROM MEM_INFO WHERE MEM_ID > 0
+	</select>
+
+	<select id="selectMemberList" resultMap="MemResultMap" parameterType="Map">
+		SELECT 
+			MEM_COMPANY,
+			MEM_NM,
+			MEM_ID, 
+			MEM_RANK,
+			MEM_PHONE,
+			MEM_RANK
+		FROM 
+			MEM_INFO
+	</select>
+	
+	<select id="selectMember" resultMap="MemResultMap" parameterType="com.ask.dental.member.MemberModel">
+		 SELECT 
+			MEM_ID, 
+			MEM_NM, 
+			MEM_PW, 
+			MEM_COMPANY 
+		FROM 
+			MEM_INFO
+		WHERE MEM_ID = #{memId}
+	</select>
+	
+	<insert id="insertMember" parameterType="com.ask.dental.member.MemberModel">
+		INSERT INTO CLINIC.MEM_INFO (
+		   MEM_SEQ, MEM_ID, MEM_NM, MEM_PW, 
+		   MEM_COMPANY) 
+		VALUES ( memSeq.nextval,
+		 		 #{memId},
+		 		 #{memNm},
+		 		 #{memPw},
+		 		 #{memCompany} )
+	</insert>
+
+	<update id="updateMember" parameterType="com.ask.dental.member.MemberModel">
+		UPDATE CLINIC.MEM_INFO
+		SET    MEM_NM   = #{memNm},
+		       MEM_PW = #{memPw},
+		       MEM_COMPANY    = #{memCompany},
+		       UPDATE_USER = #{memId},
+		       UPDATE_DATE = SYSDATE
+		where MEM_ID = #{memId}
+	</update>
+
+
+	<delete id="deleteMember" parameterType="com.ask.dental.member.MemberModel">
+		UPDATE CLINIC.MEM_INFO
+		SET    DEL_YN   = 'Y',
+		       UPDATE_USER = #{memId},
+		       UPDATE_DATE = SYSDATE
+		where MEM_ID = #{memId}
+	</delete>
+	
+	<select id="selectClinicList" resultMap="MemResultMap" parameterType="Map">
+		SELECT 
+			MEM_COMPANY,
+			MEM_NM,
+			MEM_ID, 
+			MEM_RANK,
+			MEM_PHONE,
+			MEM_RANK
+		FROM 
+			MEM_INFO
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ask.dental.mapper.ClinicMapper">
+	<resultMap id="ClinicResultMap" type="com.ask.dental.clinic.ClinicModel" >
+		<result column="CLINIC_SEQ" property="clinicSeq" jdbcType="INTEGER" />
+		<result column="CLINIC_NM" property="clinicNm" jdbcType="VARCHAR" />
+		<result column="CLINIC_CODE" property="clinicCode" jdbcType="VARCHAR" />
+    <result column="CLINIC_AREA" property="clinicArea" jdbcType="VARCHAR" />
+    <result column="CLINIC_TEL" property="clinicTel" jdbcType="VARCHAR" />
+    <result column="CLINIC_FAX" property="clinicFax" jdbcType="VARCHAR" />
+    <result column="CLINIC_ADDR" property="clinicAddr" jdbcType="VARCHAR" />
+    <result column="ZIP_CODE" property="zipCode" jdbcType="VARCHAR" />
+    <result column="DOCTOR_NM" property="doctorNm" jdbcType="VARCHAR" />
+    <result column="MNG_NM" property="mngNm" jdbcType="VARCHAR" />
+    <result column="TAX_NM" property="taxNm" jdbcType="VARCHAR" />
+    <result column="TAX_TEL" property="taxTel" jdbcType="VARCHAR" />
+    <result column="INSURANCE_PRO" property="insurancePro" jdbcType="VARCHAR" />
+    <result column="READER_SITE" property="readerSite" jdbcType="VARCHAR" />
+		<result column="LICENSE_NB" property="readerTel" jdbcType="VARCHAR" />
+		<result column="INTR_ID" property="intrId" jdbcType="VARCHAR" />
+		<result column="INTR_PW" property="intrPw" jdbcType="VARCHAR" />
+		<result column="CLINIC_GR" property="clinicGr" jdbcType="VARCHAR" />
+		<result column="CLINIC_ETC" property="clinicEtc" jdbcType="VARCHAR" />
+    <result column="DEL_YN" property="delYn" jdbcType="VARCHAR" />
+    <result column="INSERT_USER" property="insertUser" jdbcType="VARCHAR" />
+    <result column="INSERT_DATE" property="insertDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_USER" property="updateUser" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="GROUP_DESC" property="groupDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  
+	<select id="selectClinicCount" resultType="int" >
+		SELECT COUNT(*) CLINIC_CODE 
+		 FROM CLINIC_INFO WHERE CLINIC_CODE > 0
+	</select>
+
+	<select id="selectClinicList" resultMap="ClinicResultMap" parameterType="Map">
+		SELECT 
+			A.CLINIC_NM AS CLINIC_NM, 
+			A.CLINIC_AREA CLINIC_AREA, 
+			A.DOCTOR_NM DOCTOR_NM,
+			A.MNG_NM MNG_NM,
+			A.CLINIC_TEL CLINIC_TEL, 
+			A.CLINIC_GR CLINIC_GR,
+			(SELECT GROUP_DESC FROM COM_CLINIC_GROUP WHERE GROUP_ID = A.CLINIC_GR) AS GROUP_DESC
+		FROM 
+			CLINIC_INFO A
+		WHERE A.DEL_YN = "N"
+		<!--  ORDER BY #{sidx} #{sord}-->
+	</select>
+	
+	<select id="selectClinic" resultMap="ClinicResultMap" parameterType="com.ask.dental.clinic.ClinicModel">
+		 SELECT 
+			CLINIC_NM, 
+			CLINIC_AREA, 
+			CLINIC_TEL, 
+			CLINIC_GR 
+		FROM 
+			CLINIC_INFO
+		WHERE CLINIC_CODE = #{clinicCode}
+	</select>
+	
+	<insert id="insertClinic" parameterType="com.ask.dental.clinic.ClinicModel">
+		INSERT INTO CLINIC.CLINIC_INFO (
+		   CLINIC_SEQ, CLINIC_NM, CLINIC_AREA, CLINIC_TEL, CLINIC_GR, 
+		   MEM_COMPANY) 
+		VALUES ( clinicSeq.nextval,
+		 		 #{clinicNm},
+		 		 #{clinicArea},
+		 		 #{clinicTel},
+		 		 #{clinicGr} )
+	</insert>
+
+	<update id="updateClinic" parameterType="com.ask.dental.clinic.ClinicModel">
+		UPDATE CLINIC.CLINIC_INFO
+		SET    CLINIC_NM   = #{clinicNm},
+		       CLINIC_AREA = #{clinicArea},
+		       CLINIC_TEL    = #{clinicTel},
+		       UPDATE_USER = #{updateUser},
+		       UPDATE_DATE = SYSDATE
+		where CLINIC_CODE = #{clinicCode}
+	</update>
+
+
+	<delete id="deleteClinic" parameterType="com.ask.dental.clinic.ClinicModel">
+		UPDATE CLINIC.CLINIC_INFO
+		SET   DEL_YN   = 'Y',
+					UPDATE_USER = #{updateUser},
+		      UPDATE_DATE = SYSDATE
+		where CLINIC_CODE = #{clinicCode}
+
+	</delete>
+	
+	<select id="getSelectClinic" resultMap="ClinicResultMap" parameterType="com.ask.dental.clinic.ClinicModel">
+		SELECT  DISTINCT CLINIC_CODE AS selClinicCode, CLINIC_NM AS selClinicNm
+		FROM CLINIC_INFO
+		WHERE DEL_YN = "N"
+	</select>
+</mapper>
+

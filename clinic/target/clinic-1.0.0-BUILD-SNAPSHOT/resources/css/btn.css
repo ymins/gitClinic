@@ -1,0 +1,17 @@
+
+/* 진회색 바탕 & 진오렌지 여백은 6씩 , 라운드는 2px*/
+.testbutton {
+  font-family: arial;
+  font-weight: bold;
+  color: #FFFFFF !important;
+  font-size: 12px;
+  padding: 6px 6px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  background: #777777;
+}
+.testbutton:hover {
+  color: #FFFFFF !important;
+  background: #FF5f09;
+}

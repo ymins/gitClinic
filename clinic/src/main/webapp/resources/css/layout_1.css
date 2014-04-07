@@ -1,0 +1,16 @@
+* {margin:0; padding:0;}
+#wrap {width:1000px; margin:0 auto;}
+#box_a {height:600px; background:#fcb354; float:left; width:20%;}
+#box_b {height:50px; background:#f1779e; width:80%; float:left;}
+#box_c {height:550px; background:#24bbaf; width:80%; float:left;}
+
+@media screen and (max-width:1200px) {
+	#wrap {width:100%;}
+}
+
+@media screen and (max-width:800px) {
+	#wrap {width:100%;}
+	#box_a {float:none; width:100%;}
+	#box_b {float:none; width:100%;}
+	#box_c {float:none;  width:100%; }
+}

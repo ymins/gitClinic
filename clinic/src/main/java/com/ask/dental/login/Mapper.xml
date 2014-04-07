@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ask.dental.mapper.LoginMapper">
+	<resultMap id="LoginResultMap" type="com.ask.dental.member.MemberModel" >
+		<result column="MEM_SEQ" property="memSeq" jdbcType="INTEGER" />
+		<result column="MEM_NM" property="memNm" jdbcType="VARCHAR" />
+    <result column="MEM_ID" property="memId" jdbcType="VARCHAR" />
+    <result column="MEM_AUTH" property="memAuth" jdbcType="VARCHAR" />
+    <result column="MEM_COMPANY" property="memCompany" jdbcType="VARCHAR" />
+    <result column="COM_CODE" property="comCode" jdbcType="VARCHAR" />
+    <result column="MEM_RANK" property="memRank" jdbcType="VARCHAR" />
+    <result column="MEM_TEL" property="memTel" jdbcType="VARCHAR" />
+    <result column="MEM_PHONE" property="memPhone" jdbcType="VARCHAR" />
+    <result column="MEM_EMAIL" property="memEmail" jdbcType="VARCHAR" />
+    <result column="MEM_ADDR" property="memAddr" jdbcType="VARCHAR" />
+    <result column="MEM_PW" property="memPw" jdbcType="VARCHAR" />
+    <result column="DEL_YN" property="delYn" jdbcType="VARCHAR" />
+    <result column="INSERT_USER" property="insertUser" jdbcType="VARCHAR" />
+    <result column="INSERT_DATE" property="insertDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_USER" property="updateUser" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+	
+	<select id="goLogin"  parameterType="java.util.Map"  resultType="Integer" >
+		SELECT 
+    	COUNT(MEM_ID) 
+    FROM MEM_INFO
+    WHERE MEM_ID = #{memId}
+    AND MEM_PW = #{memPw}
+    AND DEL_YN ='N'
+	</select>
+
+	<select id="getMemberInfo" resultMap="LoginResultMap" parameterType="String">
+		SELECT MEM_SEQ, MEM_NM, MEM_ID, MEM_AUTH, MEM_COMPANY, COM_CODE, MEM_RANK
+			FROM MEM_INFO
+		WHERE MEM_ID = #{memId}
+	</select>
+	
+	<select id="getIdCheck" parameterType="String"  resultType="Integer">
+	   SELECT 
+	    	COUNT(MEM_ID) 
+	    FROM MEM_INFO
+	    WHERE MEM_ID = #{memId}
+	</select>
+</mapper>
+

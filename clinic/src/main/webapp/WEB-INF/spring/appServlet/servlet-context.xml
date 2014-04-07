@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<mvc:annotation-driven /> 
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.ask.dental.com.interceptor.MemberLoginCheckInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- com.onj.board 패키지의 Class들을 Scan한다. [Controller]-->
+	<context:component-scan base-package="com.ask.dental" /> 
+	
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/www/" />
+		<property name="suffix" value=".jsp" />
+		<property name="order" value="2" />
+	</bean>
+
+	<!-- use tiles -->
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+	 <property name="definitions">
+	  <list>
+	   <value>/WEB-INF/layouts/tiles-layout.xml</value>
+	  </list>
+	 </property>
+	 <property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory"/>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"> 
+	 <property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/> 
+	 <property name="order" value="1" />
+	</bean>
+	<!-- use tiles -->
+	
+	<!--  message 사용하기 -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+       <property name="basenames" value="message" />     <!-- messages.properties source 경로 --> <!-- 여러개일경우 property태그 안에<list><value>cms/messages</value></list>로 변경 -->
+  </bean>
+  <bean id="messageSourceAccessor" class="org.springframework.context.support.MessageSourceAccessor">
+      <constructor-arg ref="messageSource"/>
+  </bean>
+  <bean id="message" class="com.ask.dental.com.util.message.Message">
+      <property name="messageSourceAccessor" ref="messageSourceAccessor"/>
+  </bean>
+  
+  <!-- JsonView -->
+  <bean id="jsonView" class="net.sf.json.spring.web.servlet.view.JsonView">
+  	<property name="contentType" value="application/json;charset=UTF-8"/>
+  </bean>
+	
+</beans>
